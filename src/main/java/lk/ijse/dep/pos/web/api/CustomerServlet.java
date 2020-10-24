@@ -19,7 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
-@WebServlet(name = "CustomerServlet", urlPatterns = "/customers")
+@WebServlet(name = "CustomerServlet", urlPatterns = "/api/v1/customers")
 public class CustomerServlet extends HttpServlet {
     private CustomerBO customerBO;
 
@@ -80,7 +80,6 @@ public class CustomerServlet extends HttpServlet {
         resp.setContentType("text/plain");
 
         try (PrintWriter out = resp.getWriter()){
-            System.out.println(customerBO.customerExist(id));
             if (customerBO.customerExist(id)==true) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
                 return;
@@ -126,8 +125,9 @@ public class CustomerServlet extends HttpServlet {
         }
 
         try{
-            if (!customerBO.customerExist(id)) {
+            if (customerBO.customerExist(id)==false) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                return;
 
             }
             customerBO.updateCustomer(id,name,address);
